@@ -13,7 +13,13 @@ dat/
     glove.6B.200d.magnitude
     glove.twitter.27B.50d.magnitude
     GoogleNews-vectors-negative300.magnitude
+    ...more
 ```
+
+To convert other word embedding formats to magnitude:
+
+`python -m pymagnitude.converter -i <PATH TO FILE TO BE CONVERTED> -o <OUTPUT PATH FOR MAGNITUDE FILE>`
+
 
 ## Run app
 

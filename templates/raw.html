@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Slant Thesaurus</title>
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <script src="{{ url_for('static', filename='js/raw.js') }}"></script>
+    <!-- <link href="{{ url_for('static', filename='css/style.css') }}" type="text/css" rel="stylesheet"> -->
+
+  </head>
+  <body>
+    <div class="container-fluid">
+
+      <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-5">
+          
+          <h1>Avantpie</h1>
+          <br />          
+
+          <!-- search functionality -->
+          <form class="form-inline">
+            <div class="form-group form-group-sm">
+              <label for="base"><small>Less like...</small></label><br />
+              <input type="text" class="form-control" id="base" placeholder="sweet">
+            </div>
+            <div class="form-group form-group-sm">
+              <label for="goal"><small>More like...</small></label><br />
+              <input type="text" class="form-control" id="goal" placeholder="rough">
+            </div>
+          </form>
+          <form class="form-inline">
+            <div class="form-group form-group-sm">
+              <label for="base"><small>Style words...</small></label><br />
+              <textarea type="text" class="form-control" id="style" placeholder="excellent,abitious,brilliant">
+              </textarea>
+            </div>
+          </form>
+          <br />
+          <br />
+          <div class="form-inline">
+            <div class="form-group has-success">
+              <input type="text" class="form-control" id="keyword" placeholder="tenderly">
+            </div>
+            <button class="btn btn-success get_words">Search</button>
+          </div>
+
+          <!-- selecting different word embeddings -->
+          <br />
+          <br />
+          <h5>Word embedding options:</h5>
+          <div class="radio">
+            <label>
+              <input type="radio" name="embOptions" id="word2vec" value="GoogleNews-vectors-negative300">
+              word2vec: GoogleNews (300d)
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name="embOptions" id="glove1" value="glove-6B-200d" checked>
+              glove: Wikipedia2014+Gigaword5 (200d)
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name="embOptions" id="glove2" value="glove-twitter-27B-50d">
+              glove: Twitter (50d)
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name="embOptions" id="food" value="food">
+              food: Amazon Food Reviews (100d)
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name="embOptions" id="poetry" value="poetry">
+              poetry: 5k Professional Poems (100d)
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name="embOptions" id="sherlock" value="sherlock">
+              sherlock: All Sherlock Novels (100d)
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name="embOptions" id="darwin" value="darwin">
+              darwin: Works of Charles Darwin (100d)
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name="embOptions" id="dickens" value="dickens">
+              dickens: Works of Charles Dickents (100d)
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name="embOptions" id="joyce" value="joyce">
+              joyce: Works of James Joyce (100d)
+            </label>
+          </div>
+
+        </div>
+
+        <!-- column for results to display -->
+        <div class="col-md-2">
+          <div>
+            <br />
+            <br />
+            <h4>Algo results:</h4>
+          </div>
+          <div class='data'>
+          </div>
+
+          <div class='aresults'>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div>
+            <br />
+            <br />
+            <h4>Thesaurus results:</h4>
+          </div>
+          <div class='data'>
+          </div>
+
+          <div class='tresults'>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </body>
+</html>
