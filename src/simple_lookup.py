@@ -64,7 +64,15 @@ def simple_lookup(keyword, embkey="glove.6B.200d"):
     for w in words:
         dist.append(vectors.distance(keyword, w))
     order = np.argsort(dist)
-    return {'words': [words[i] for i in order], 'distance': [dist[i].item() for i in order]}
+
+    # also just get the words closest based on the embedding
+    print([w for w, d in vectors.most_similar(keyword, topn=10)])
+
+    return {
+        'words': [words[i] for i in order],
+        'distance': [dist[i].item() for i in order],
+        'closest': [w for w, d in vectors.most_similar(keyword, topn=10)]
+        }
 
 def analogy_lookup(keyword, base, goal, n=10, embkey="glove.6B.200d"):
     """Return list of top n words of an analogy lookup, and list of distances.
