@@ -58,6 +58,9 @@ function get_words_algo() {
   for (var key in embeddings) {
     console.log('#' + embeddings[key]);
     $('#' + embeddings[key]).empty();
+    var loading = $('<span class="glyphicon glyphicon-refresh" aria-hidden="true">');
+    loading.addClass("spin");
+    $('#' + embeddings[key]).append(loading);
     console.log('querying', key);
     var data = {
       keyword: $('#keyword').val(),
@@ -67,19 +70,45 @@ function get_words_algo() {
     // console.log('data:', data);
 
     $.post('get_words_algo?', data, function(json, status) {
+      $('#' + json.embd).empty();
       console.log('algo response:', json);
       if (json.hasOwnProperty('error')) {
         $('#' + json.embd).append('<p>' + json.error);
         return;
       }
 
+    
       var words = json.words;
       var p = $("<p>");
       $.each(words, function(i, text) {
         if (i >= 10) { return false; }
         p.append(text).append(', ');
       });
-      console.log('appending to', json.embd);
+      $('#' + json.embd).append(p);
+
+      if (json.hasOwnProperty('closest')) {
+        var closest = json.closest;
+        var p = $("<p>");
+        p.addClass('text-muted');
+        $.each(closest, function(i, text) {
+          p.append(text).append(', ');
+        });
+        $('#' + json.embd).append(p);
+      }
+
+      if (json.hasOwnProperty('dicterror')) { 
+        $('#' + json.embd).append('<p>' + json.dicterror);
+      } else {
+        var p = $("<p>");
+        var sp = $("<span>");
+        sp.addClass("usage").text(json.sentence);
+        p.append("usage: ").append(sp);
+        $('#' + json.embd).append(p);
+      }
+    }).fail(function(response) {
+      console.log('Error: ' + response.responseText);
+      var p = $("<p>");
+      p.text('error occurred.');
       $('#' + json.embd).append(p);
     });
   }
