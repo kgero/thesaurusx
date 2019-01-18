@@ -23,7 +23,8 @@ emb = {
     "sherlock": Magnitude("dat/sherlock.magnitude"),
     "joyce": Magnitude("dat/joyce.magnitude"),
     "darwin": Magnitude("dat/darwin.magnitude"),
-    "dickens": Magnitude("dat/dickens.magnitude")
+    "dickens": Magnitude("dat/dickens.magnitude"),
+    "law": Magnitude("dat/law.magnitude")
 }
 print('ready!')
 
@@ -66,7 +67,7 @@ def simple_lookup(keyword, embkey="glove.6B.200d"):
     order = np.argsort(dist)
 
     # also just get the words closest based on the embedding
-    print([w for w, d in vectors.most_similar(keyword, topn=10)])
+    # print([w for w, d in vectors.most_similar(keyword, topn=10)])
 
     return {
         'words': [words[i] for i in order],

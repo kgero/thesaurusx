@@ -8,7 +8,8 @@ var embeddings = {
   'Joyce': 'joyce',
   'Dickens': 'dickens',
   'Darwin': 'darwin',
-  'Sherlock': 'sherlock'
+  'Sherlock': 'sherlock',
+  'Law': 'law'
 };
 
 function set_up_old() {
