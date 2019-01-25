@@ -9,8 +9,12 @@ var embeddings = {
   'Dickens': 'dickens',
   'Darwin': 'darwin',
   'Sherlock': 'sherlock',
-  'Law': 'law'
+  'Law': 'law',
+  'Darwin Dep': 'darwin-dep',
+  'Joyce Dep': 'joyce-dep'
 };
+
+var default_checks = ['norm', 'GoogleNews-vectors-negative300', 'joyce', 'darwin']
 
 function set_up_old() {
   console.log('making new divs...');
@@ -43,6 +47,26 @@ function set_up() {
     dl.append(dt).append(dd);
   }
   $('.main').append(dl);
+
+  // making checkboxes
+  var lab = $('<label class="checkbox-inline">');
+  var box = $('<input type="checkbox" id="norm_box">');
+  box.val('norm');
+  lab.append(box).append('Regular');
+  $('.checkboxes').append(lab);
+  for (var key in embeddings) {
+    var lab = $('<label class="checkbox-inline">');
+    var box = $('<input type="checkbox">');
+    box.attr('id', embeddings[key] + '_box');
+    box.val(embeddings[key]);
+    lab.append(box).append(key);
+    $('.checkboxes').append(lab);
+  }
+
+  //check defaults
+  $.each(default_checks, function(i, val) {
+    $('#' + val + '_box').prop('checked', true);
+  });
 }
 
 function update_styles() {
@@ -67,8 +91,6 @@ function get_words_algo() {
       keyword: $('#keyword').val(),
       embd: embeddings[key]
     };
-    // console.log('get_words_algo():');
-    // console.log('data:', data);
 
     $.post('get_words_algo?', data, function(json, status) {
       $('#' + json.embd).empty();
@@ -77,7 +99,6 @@ function get_words_algo() {
         $('#' + json.embd).append('<p>' + json.error);
         return;
       }
-
     
       var words = json.words;
       var p = $("<p>");
@@ -98,9 +119,10 @@ function get_words_algo() {
       }
 
       if (json.hasOwnProperty('dicterror')) { 
-        $('#' + json.embd).append('<p>' + json.dicterror);
-      } else {
+        $('#' + json.embd).append('<p class="text-muted">' + json.dicterror);
+      } else if (json.hasOwnProperty('sentence')) {
         var p = $("<p>");
+        p.addClass('text-muted');
         var sp = $("<span>");
         sp.addClass("usage").text(json.sentence);
         p.append("usage: ").append(sp);
@@ -149,6 +171,13 @@ $(document).ready( function() {
   set_up();
 
   update_styles();
+
+  $('#keyword').bind('keyup', function(e) {
+    if ( e.keyCode === 13 ) { // 13 is enter key
+      get_words_algo(); 
+      get_words_simple(); 
+    }
+  });
 
   $('.get_words').click( function() { 
     get_words_algo(); 
