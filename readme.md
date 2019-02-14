@@ -10,9 +10,13 @@ When running the jupyter notebook, make sure you are running the right python ex
 
 `python -m ipykernel install --user --name=my-virtualenv-name`
 
-You'll also need a `dat` directory with the word embeddings, and `tmp` directory if you'll be training your own.
+You'll also need a `dat/vecs` directory with the word embeddings and `dat/corpora` directory with the raw corpora (for pulling example sentences). Currently requires internet connection; makes an API call to [DataMuse](http://www.datamuse.com/api/).
 
 ## Word embeddings
+
+Word embeddings should be in `.txt` format with the vocab and dimension on the first line. Use `src/make_annoy.py` to convert any files in `/dat/vecs/` into [annoy](https://github.com/spotify/annoy) format, which is a approximate nearest neighbors library to very fast look-ups.
+
+### Deprecated
 
 Train new word embeddings with `src/make_embeddings.py`. This save the embeddings to the `tmp` directory as .txt file. You'll then need to convert them to magniute format. (Learn more about [Magnitude: a fast, simple vector embedding utility library](https://github.com/plasticityai/magnitude); also includes some pre-trained word embeddings to download.) Need a `dat` directory with some `.magnitude` embeddings; will select whatevers in the `dat` directory with the right extension. (Make sure that it's in the list in `main.js`.)
 

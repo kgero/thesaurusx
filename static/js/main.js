@@ -1,17 +1,18 @@
 
 var embeddings = {
-  'GoogleNews': 'GoogleNews-vectors-negative300', 
-  'Wikipedia+Gigaword': 'glove-6B-200d', 
-  'Twitter': 'glove-twitter-27B-50d',
-  'Food Reviews': 'food',
+  // 'GoogleNews': 'GoogleNews-vectors-negative300', 
+  // 'Wikipedia+Gigaword': 'glove-6B-200d', 
+  // 'Twitter': 'glove-twitter-27B-50d',
+  // 'Food Reviews': 'food',
   'Poetry Magazine': 'poetry',
   'Joyce': 'joyce',
   'Dickens': 'dickens',
   'Darwin': 'darwin',
   'Sherlock': 'sherlock',
   'Law': 'law',
-  'Darwin Dep': 'darwin-dep',
-  'Joyce Dep': 'joyce-dep'
+  'Science': 'arxiv_abs'
+  // 'Darwin Dep': 'darwin-dep',
+  // 'Joyce Dep': 'joyce-dep'
 };
 
 var default_checks = ['norm', 'GoogleNews-vectors-negative300', 'joyce', 'darwin']
@@ -78,7 +79,7 @@ function update_styles() {
   });
 }
 
-function get_words_algo() {
+function get_words_algo(partofspeech) {
 
   for (var key in embeddings) {
     console.log('#' + embeddings[key]);
@@ -89,7 +90,8 @@ function get_words_algo() {
     console.log('querying', key);
     var data = {
       keyword: $('#keyword').val(),
-      embd: embeddings[key]
+      embd: embeddings[key],
+      pos: partofspeech
     };
 
     $.post('get_words_algo?', data, function(json, status) {
@@ -140,6 +142,7 @@ function get_words_algo() {
 function get_words_simple() {
   console.log('get_words_simple');
   $('.normal').empty();
+  for (var key in embeddings) { $('#' + embeddings[key]).empty(); }
   var data = {
     keyword: $('#keyword').val()
   };
@@ -151,6 +154,12 @@ function get_words_simple() {
       $('.normal').append('<p>' + json.error);
       return;
     }
+
+    var p1 = $("<p>").text('parts of speech: '+json.pos);
+    console.log('hiiii', p1);
+    $('#pos').empty().append(p1);
+
+    get_words_algo(json.pos_search);
 
     var words = json.words;
     var p = $("<p>");
@@ -174,13 +183,13 @@ $(document).ready( function() {
 
   $('#keyword').bind('keyup', function(e) {
     if ( e.keyCode === 13 ) { // 13 is enter key
-      get_words_algo(); 
+      // get_words_algo(); 
       get_words_simple(); 
     }
   });
 
   $('.get_words').click( function() { 
-    get_words_algo(); 
+    // get_words_algo(); 
     get_words_simple(); 
   });
 

@@ -3,13 +3,13 @@ Functions for getting examples of word usage.
 """
 import os
 
-STYLES = ['darwin', 'dickens', 'food', 'joyce', 'poetry', 'sherlock', 'law']
+STYLES = ['darwin', 'dickens', 'food', 'joyce', 'poetry', 'sherlock', 'law', 'arxiv_abs']
 
 def get_ex_sen(word, style):
     """Return string of example usage of word in style corpus."""
     if style not in STYLES:
         return {'dicterror': 'no corpus available for {}.'.format(style)}
-    fldr = os.path.join('dat', style)
+    fldr = os.path.join('dat/corpora', style)
     for fname in os.listdir(fldr):
         prevline = ''
         for line in open(os.path.join(fldr, fname), errors='ignore'):
