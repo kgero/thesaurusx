@@ -4,18 +4,26 @@ var embeddings = {
   // 'Wikipedia+Gigaword': 'glove-6B-200d', 
   // 'Twitter': 'glove-twitter-27B-50d',
   // 'Food Reviews': 'food',
-  'Poetry Magazine': 'poetry',
+  // 'GloVe': 'glove-slim',
+  'Science': 'arxiv_abs',
   'Joyce': 'joyce',
   'Dickens': 'dickens',
   'Darwin': 'darwin',
   'Sherlock': 'sherlock',
-  'Law': 'law',
-  'Science': 'arxiv_abs'
+  'Poetry Magazine': 'poetry',
+  // 'Aretha Tweets': 'aretha',
+  // 'Australia Tweets': 'australia',
+  // '1B Corpus': 'oneb',
+  'Gandhi': 'gandhi',
+  'NYT Science': 'nyt-science',
+  'Law': 'law'
+  // 'Merge Science Big': 'merge-science-big',
+  // 'Merge Science Small': 'merge-science-small'
   // 'Darwin Dep': 'darwin-dep',
   // 'Joyce Dep': 'joyce-dep'
 };
 
-var default_checks = ['norm', 'GoogleNews-vectors-negative300', 'joyce', 'darwin']
+var default_checks = ['glove-slim', 'arxiv_abs', 'joyce', 'darwin']
 
 function set_up_old() {
   console.log('making new divs...');
@@ -33,11 +41,11 @@ function set_up() {
   console.log('making new divs...');
   var dl = $("<dl>");
   dl.addClass('dl-horizontal');
-  var dt = $('<dt>');
-  dt.append('Regular').addClass('norm').addClass('style');
-  var dd = $('<dd>');
-  dd.addClass('normal').addClass('norm').addClass('style');
-  dl.append(dt).append(dd);
+  // var dt = $('<dt>');
+  // dt.append('Regular').addClass('norm').addClass('style');
+  // var dd = $('<dd>');
+  // dd.addClass('normal').addClass('norm').addClass('style');
+  // dl.append(dt).append(dd);
   for (var key in embeddings) {
     var dt = $('<dt>');
     dt.append(key);
@@ -50,11 +58,11 @@ function set_up() {
   $('.main').append(dl);
 
   // making checkboxes
-  var lab = $('<label class="checkbox-inline">');
-  var box = $('<input type="checkbox" id="norm_box">');
-  box.val('norm');
-  lab.append(box).append('Regular');
-  $('.checkboxes').append(lab);
+  // var lab = $('<label class="checkbox-inline">');
+  // var box = $('<input type="checkbox" id="norm_box">');
+  // box.val('norm');
+  // lab.append(box).append('Regular');
+  // $('.checkboxes').append(lab);
   for (var key in embeddings) {
     var lab = $('<label class="checkbox-inline">');
     var box = $('<input type="checkbox">');
@@ -62,6 +70,7 @@ function set_up() {
     box.val(embeddings[key]);
     lab.append(box).append(key);
     $('.checkboxes').append(lab);
+    $('.checkboxes').append("<br />");
   }
 
   //check defaults
@@ -82,17 +91,17 @@ function update_styles() {
 function get_words_algo(partofspeech) {
 
   for (var key in embeddings) {
-    console.log('#' + embeddings[key]);
     $('#' + embeddings[key]).empty();
     var loading = $('<span class="glyphicon glyphicon-refresh" aria-hidden="true">');
     loading.addClass("spin");
     $('#' + embeddings[key]).append(loading);
-    console.log('querying', key);
     var data = {
       keyword: $('#keyword').val(),
       embd: embeddings[key],
       pos: partofspeech
     };
+
+    console.log('get_words_algo query', key, data)
 
     $.post('get_words_algo?', data, function(json, status) {
       $('#' + json.embd).empty();
@@ -130,44 +139,49 @@ function get_words_algo(partofspeech) {
         p.append("usage: ").append(sp);
         $('#' + json.embd).append(p);
       }
+
+      if (json.hasOwnProperty('note')) {
+        if (json.note.length > 1) {
+          var p = $("<p>");
+          p.text(json.note);
+          $('#' + json.embd).append(p);
+        }
+      }
     }).fail(function(response) {
       console.log('Error: ' + response.responseText);
       var p = $("<p>");
       p.text('error occurred.');
-      $('#' + json.embd).append(p);
+      $('#' + embeddings[key]).append(p);
     });
   }
 }
 
 function get_words_simple() {
-  console.log('get_words_simple');
-  $('.normal').empty();
+  $('.mainerror').empty();
   for (var key in embeddings) { $('#' + embeddings[key]).empty(); }
   var data = {
     keyword: $('#keyword').val()
   };
-  console.log('get_words_simple():');
-  console.log('data:', data);
+  console.log('get_words_simple request', data);
   $.post('get_words_simple?', data, function(json, status) {
     console.log('simple response:', json);
     if (json.hasOwnProperty('error')) {
-      $('.normal').append('<p>' + json.error);
+      $('.mainerror').append('<p>' + json.error);
       return;
     }
 
     var p1 = $("<p>").text('parts of speech: '+json.pos);
-    console.log('hiiii', p1);
     $('#pos').empty().append(p1);
 
     get_words_algo(json.pos_search);
 
-    var words = json.words;
-    var p = $("<p>");
-    $.each(words, function(i, text) {
-      if (i >= 10) { return false; }
-      p.append(text).append(', ');
-    });
-    $('.normal').append(p);
+    // var words = json.words;
+    // var p = $("<p>");
+    // $.each(words, function(i, text) {
+    //   if (i >= 10) { return false; }
+    //   p.append(text).append(', ');
+    // });
+    // $('.normal').append(p);
   });
 }
 

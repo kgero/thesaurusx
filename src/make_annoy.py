@@ -7,6 +7,8 @@ from time import time
 
 for fle_nm in os.listdir('dat/vecs'):
     emb_nm = fle_nm.split('.')[0]
+    if emb_nm not in ['merge-science-big', 'merge-science-small']:
+        continue
     print(emb_nm)
 
     vocab = []

@@ -17,8 +17,8 @@ def hello_world():
 
 @app.route('/get_words_simple', methods=['POST'])
 def get_words_simple():
-    pos = get_pos(request.form['keyword'])
     word = request.form['keyword'].split(':')[0]
+    pos = get_pos(word)
     if not pos:
         data = {'error': 'no part of speech found'}
         resp = Response(json.dumps(data), status=200, mimetype='application/json')
@@ -27,8 +27,8 @@ def get_words_simple():
         pos_search = request.form['keyword'].split(':')[1]
     else:
         pos_search = pos[0]
-    wrds = thesaurus_lookup(word, pos_search)
-    data = {'words': wrds}
+    # wrds = thesaurus_lookup(word, pos_search)
+    data = {'words': []}
     data['pos'] = pos
     data['pos_search'] = pos_search
     resp = Response(json.dumps(data), status=200, mimetype='application/json')

@@ -1,4 +1,7 @@
-# import modules & set up logging
+"""
+Creates word embedding from text files in dat/corpora/name directory.
+Saves word embedding as .txt in dat/vecs/name.txt
+"""
 import os
 import string
 from time import time
@@ -18,8 +21,8 @@ class MySentences(object):
                 clean = line.lower().translate(table)
                 yield clean.split()
 
-name = 'joyce'
-data = 'dat/' + name
+name = 'merge-science-small'
+data = 'dat/corpora/' + name
 
 words = 0
 for fname in os.listdir(data):
@@ -30,5 +33,5 @@ print(name, ":", words, 'words')
 start = time()
 sentences = MySentences(data)  # a memory-friendly iterator
 model = gensim.models.Word2Vec(sentences, size=100, window=5)
-model.wv.save_word2vec_format('tmp/{}.txt'.format(name))
+model.wv.save_word2vec_format('dat/vecs/{}.txt'.format(name))
 print("took {:<2f} seconds".format(time() - start))

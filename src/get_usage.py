@@ -3,7 +3,8 @@ Functions for getting examples of word usage.
 """
 import os
 
-STYLES = ['darwin', 'dickens', 'food', 'joyce', 'poetry', 'sherlock', 'law', 'arxiv_abs']
+STYLES = ['darwin', 'dickens', 'food', 'joyce', 'poetry', 'sherlock', 'law', 
+    'arxiv_abs', 'australia', 'aretha', 'gandhi', 'nyt-science']
 
 def get_ex_sen(word, style):
     """Return string of example usage of word in style corpus."""

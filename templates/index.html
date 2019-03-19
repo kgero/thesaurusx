@@ -7,6 +7,8 @@
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,700" rel="stylesheet">
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
@@ -18,6 +20,20 @@
       }
       dd {
         margin-bottom: 20px;
+      }
+      h1 {
+        font-family: 'Playfair Display', serif;
+        /*font-size: 60px;*/
+      }
+      p.tag {
+        font-family: 'Playfair Display', serif;
+        font-size: 18px;
+      }
+      div.footer {
+        /*display: none;*/
+        /*position: fixed;*/
+        /*bottom: 0;*/
+        /*width: 70%;*/
       }
       .usage {
         font-style: italic;
@@ -31,17 +47,22 @@
       }
     </style>
 
+    <meta charset='utf-8'>
   </head>
   <body>
     <div class="container-fluid">
 
       <div class="row">
-        <div class="col-md-2"></div>
+        <div class="col-md-1"></div>
         <div class="col-md-8">
           
           <div class="text-center">
             <h1>Style Thesaurus</h1>
-            <br />          
+            <p class="tag text-muted">
+              🌱 <em>find words based on different domains, authors, and styless</em> &nbsp; 🌾
+            </p>
+            
+            <br />
 
             <!-- search functionality -->
             <div class="form-inline">
@@ -52,15 +73,24 @@
             </div>
             <div id="pos">
             </div>
+
+
+
           </div>
 
           <br />
           <br />
         
-
+          <div class="mainerror text-center"></div>
           <div class="main"></div>
 
+          
 
+
+        </div>
+
+        <div class="col-md-3">
+          <br />
           <div class="panel panel-default">
             <div class="panel-body">
               <p>Select styles:</p>
@@ -71,6 +101,21 @@
                 <button class="btn btn-default update_styles">Update</button>
               </p>
             </div>
+          </div>
+
+          <div class="footer">
+            <br />
+            <p>
+              <small>
+                The Style Thesaurus uses a combination of word embeddings and part-of-speech tagging. The difference between each category is the collection of text the thesaurus is trained on. 
+                <br /><br />
+                For instance, 'Science' uses 40k abstracts of science papers and 'Gandhi' uses his collected speeches and letters. 
+                <br /><br />
+              Made by <a href="http://www.katygero.com/" target="_blank">Katy Ilonka Gero</a>.
+              <br />
+              I would love to know your thoughts! 
+            </small>
+            </p>
           </div>
             
         </div>

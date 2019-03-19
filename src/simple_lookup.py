@@ -22,15 +22,21 @@ VOC = {}
 for filename in os.listdir('dat/annoy'):
     if filename.split('.')[-1] == 'ann':
         name = filename.split('.')[0]
-        print(name, filename)
         u = AnnoyIndex(DIM)
         u.load(os.path.join('dat/annoy', filename))
         EMB[name] = u
     if filename.split('.')[-1] == 'pkl':
         name = filename.split('.')[0]
-        print(name, filename)
         VOC[name] = pickle.load(open(os.path.join('dat/annoy', filename), 'rb'))
-print('Ready!')
+POS = {}
+for filename in os.listdir('dat/pos'):
+    if filename.split('.')[-1] == 'pkl':
+        name = filename.split('.')[0]
+        POS[name] = pickle.load(open(os.path.join('dat/pos', filename), 'rb'))
+print('EMBEDDINGS:\n', EMB.keys())
+print('VOCAB:\n', VOC.keys())
+print('PART OF SPEECH:\n', POS.keys())
+print('Ready!\n\n')
 
 
 def check_words(words, embkey="glove.6B.200d"):
@@ -45,15 +51,9 @@ def check_words(words, embkey="glove.6B.200d"):
 def get_pos(word):
     """Return list of all possible parts of speech of word."""
     pos = []
-    for ss in wn.synsets(word):
-        if ss.pos() == 's':  # synonym
-            continue
-        elif ss.pos() == 'r':
-            pos.append('adv')
-        elif ss.pos() == 'a':
-            pos.append('adj')
-        else:
-            pos.append(ss.pos())
+    for pos_key in POS:
+        if word in POS[pos_key]:
+            pos += POS[pos_key][word]
     return list(set(pos))
 
 def simple_lookup(keyword, pos, embkey="glove.6B.200d"):
@@ -64,18 +64,26 @@ def simple_lookup(keyword, pos, embkey="glove.6B.200d"):
         return {'error': '{} not in embeddings.'.format(keyword)}
 
     keyidx = vocab.index(keyword)
-    words = [w for w in thesaurus_lookup(keyword, pos) if w in vocab]
-    dist = []
-    for w in words:
-        dist.append(vectors.get_distance(keyidx, vocab.index(w)))
-    order = np.argsort(dist)
+    # words = [w for w in thesaurus_lookup(keyword, pos) if w in vocab]
+    # dist = []
+    # for w in words:
+    #     dist.append(vectors.get_distance(keyidx, vocab.index(w)))
+    # order = np.argsort(dist)
 
-    raw = [vocab[idx] for idx in vectors.get_nns_by_item(keyidx, 10)]
+    raw = [vocab[idx] for idx in vectors.get_nns_by_item(keyidx, 50)]
+    note = ''
+    if embkey in POS.keys():
+        raw = [word for word in raw if POS[embkey].get(word) is not None]
+        raw = [word for word in raw if pos in POS[embkey][word]]
+        note = '(returning only {} words from {})'.format(pos, embkey)
+    else:
+        note = '(no part-of-speech information available.)'
 
     return {
-        'closest': [words[i] for i in order][:10],  # muted
-        'distance': [dist[i] for i in order],
-        'words': raw  # first
+        # 'closest': [words[i] for i in order][:10],  # muted
+        # 'distance': [dist[i] for i in order],
+        'words': raw[1:11],  # first
+        'note': note
         }
 
 def thesaurus_lookup(keyword, pos):
