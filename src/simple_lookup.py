@@ -105,6 +105,22 @@ def simple_lookup(keyword, pos, embkey="glove.6B.200d"):
         'note': note
         }
 
+def real_simple_lookup(keyword, embkey, n=10):
+    keyword = keyword.strip(',.;:')
+    keyword = get_lemma(keyword)
+    vectors = EMB[embkey]
+    vocab = VOC[embkey]
+    if keyword not in vocab:
+        return {'error': '{} not in embeddings.'.format(keyword)}
+
+    keyidx = vocab.index(keyword)
+    raw = [vocab[idx] for idx in vectors.get_nns_by_item(keyidx, n)]
+    note = ''
+    return {
+        'words': raw,
+        'note': note
+        }
+
 def get_vocab(embkey):
     return VOC[embkey]
 

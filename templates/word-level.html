@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Style Thesaurus</title>
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,700" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    <!-- <script src="{{ url_for('static', filename='js/main.js') }}"></script> -->
+    <script src="{{ url_for('static', filename='js/word-level.js') }}"></script>
+    <!-- <link href="{{ url_for('static', filename='css/style.css') }}" type="text/css" rel="stylesheet"> -->
+
+
+    <meta charset='utf-8'>
+  </head>
+  <body>
+    <div class="container-fluid">
+
+      <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-8">
+          
+          <div class="text-center">
+            <h1>Style Thesaurus</h1>
+            <p class="tag text-muted">
+              🌱 <em>find words based on different domains, authors, and styless</em> &nbsp; 🌾
+            </p>
+            
+            <br />
+
+            <!-- search functionality -->
+            <div class="panel panel-default">
+              <div class="panel-body texthere" contenteditable="true">
+                Basic panel example
+              </div>
+              <button type="button" class="btn btn-default update">update</button>
+            </div>
+
+
+
+          </div>
+
+
+        </div>
+
+        <div class="col-md-3">
+          <br />
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <p>Select styles:</p>
+              <div class="checkboxes">
+              </div>
+              <p>
+                <br />
+                <button class="btn btn-default update_styles">Update</button>
+              </p>
+            </div>
+          </div>
+
+            
+        </div>
+
+    </div>
+  </body>
+</html>
