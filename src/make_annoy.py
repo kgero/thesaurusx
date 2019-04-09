@@ -7,7 +7,7 @@ from time import time
 
 for fle_nm in os.listdir('dat/vecs'):
     emb_nm = fle_nm.split('.')[0]
-    if emb_nm not in ['merge-science-big', 'merge-science-small']:
+    if emb_nm not in ['oneb_lemma']:
         continue
     print(emb_nm)
 
@@ -21,11 +21,7 @@ for fle_nm in os.listdir('dat/vecs'):
         i = 0
         for line in fle:
             word = line.split(' ')[0]
-            try:
-                vec = [float(num) for num in line.strip('\n').strip(' ').split(' ')[1:]]
-            except ValueError:
-                print(line.strip('\n').split(' ')[1:])
-                raise ValueError
+            vec = [float(num) for num in line.strip('\n').strip(' ').split(' ')[1:]]
             vocab.append(word)
             t.add_item(i, vec)
             i += 1

@@ -9,10 +9,11 @@ import numpy as np
 import os
 import requests
 import pickle
+import spacy
 
 from annoy import AnnoyIndex
-from nltk.corpus import wordnet as wn
 
+nlp = spacy.load('en_core_web_sm')
 
 # ASSUMES ALL EMBEDDINGS ARE 100 DIMENSION!!
 DIM = 100
@@ -22,7 +23,10 @@ VOC = {}
 for filename in os.listdir('dat/annoy'):
     if filename.split('.')[-1] == 'ann':
         name = filename.split('.')[0]
-        u = AnnoyIndex(DIM)
+        if name == 'word2vec-slim':
+            u = AnnoyIndex(300)
+        else:
+            u = AnnoyIndex(DIM)
         u.load(os.path.join('dat/annoy', filename))
         EMB[name] = u
     if filename.split('.')[-1] == 'pkl':
@@ -56,6 +60,12 @@ def get_pos(word):
             pos += POS[pos_key][word]
     return list(set(pos))
 
+def get_lemma(word):
+    """Return lemma of word."""
+    doc = nlp(word)
+    for token in doc:
+        return token.lemma_
+
 def simple_lookup(keyword, pos, embkey="glove.6B.200d"):
     """Return words from thesaurus lookup, ordered by embedding distance."""
     vectors = EMB[embkey]
@@ -74,9 +84,18 @@ def simple_lookup(keyword, pos, embkey="glove.6B.200d"):
     note = ''
     if embkey in POS.keys():
         raw = [word for word in raw if POS[embkey].get(word) is not None]
-        raw = [word for word in raw if pos in POS[embkey][word]]
+        raw = [get_lemma(word) for word in raw if pos in POS[embkey][word]]
+        raw = [word for word in raw if word != get_lemma(keyword)]
+        seen = set()
+        seen_add = seen.add
+        raw = [x for x in raw if not (x in seen or seen_add(x))]
         note = '(returning only {} words from {})'.format(pos, embkey)
     else:
+        raw = [get_lemma(word) for word in raw]
+        raw = [word for word in raw if word != get_lemma(keyword)]
+        seen = set()
+        seen_add = seen.add
+        raw = [x for x in raw if not (x in seen or seen_add(x))]
         note = '(no part-of-speech information available.)'
 
     return {
@@ -85,6 +104,9 @@ def simple_lookup(keyword, pos, embkey="glove.6B.200d"):
         'words': raw[1:11],  # first
         'note': note
         }
+
+def get_vocab(embkey):
+    return VOC[embkey]
 
 def thesaurus_lookup(keyword, pos):
     """Return list of all words from a thesaurus lookup with pos in tags."""
