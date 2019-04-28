@@ -66,7 +66,7 @@ def get_lemma(word):
     for token in doc:
         return token.lemma_
 
-def simple_lookup(keyword, pos, embkey="glove.6B.200d"):
+def simple_lookup(keyword, pos, embkey="glove.6B.200d", nopos=False):
     """Return words from thesaurus lookup, ordered by embedding distance."""
     vectors = EMB[embkey]
     vocab = VOC[embkey]
@@ -82,7 +82,7 @@ def simple_lookup(keyword, pos, embkey="glove.6B.200d"):
 
     raw = [vocab[idx] for idx in vectors.get_nns_by_item(keyidx, 50)]
     note = ''
-    if embkey in POS.keys():
+    if embkey in POS.keys() and not nopos:
         raw = [word for word in raw if POS[embkey].get(word) is not None]
         raw = [get_lemma(word) for word in raw if pos in POS[embkey][word]]
         raw = [word for word in raw if word != get_lemma(keyword)]
@@ -105,8 +105,8 @@ def simple_lookup(keyword, pos, embkey="glove.6B.200d"):
         'note': note
         }
 
-def real_simple_lookup(keyword, embkey, n=10):
-    keyword = keyword.strip(',.;:')
+def real_simple_lookup(keyword, embkey, n=5):
+    keyword = keyword.strip(',.;:').lower()
     keyword = get_lemma(keyword)
     vectors = EMB[embkey]
     vocab = VOC[embkey]
@@ -114,7 +114,7 @@ def real_simple_lookup(keyword, embkey, n=10):
         return {'error': '{} not in embeddings.'.format(keyword)}
 
     keyidx = vocab.index(keyword)
-    raw = [vocab[idx] for idx in vectors.get_nns_by_item(keyidx, n)]
+    raw = [vocab[idx] for idx in vectors.get_nns_by_item(keyidx, n, search_k=100)[1:]]
     note = ''
     return {
         'words': raw,

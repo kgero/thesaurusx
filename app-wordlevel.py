@@ -17,7 +17,14 @@ def hello_world():
 def get_words_simple():
     word = request.form['keyword']
     embkey = request.form['embkey']
-    data = real_simple_lookup(word, embkey)
+    if len(word) == 0:
+        resp = Response(json.dumps({'error': 'empty string'}), status=200, mimetype='application/json')
+        return resp
+    if 'n' in request.form:
+        n = int(request.form['n'])
+    else:
+        n = 5
+    data = real_simple_lookup(word, embkey, n=n)
     resp = Response(json.dumps(data), status=200, mimetype='application/json')
     return resp
 
