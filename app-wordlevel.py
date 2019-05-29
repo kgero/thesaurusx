@@ -4,7 +4,7 @@ from sklearn.decomposition import PCA
 from flask import Flask, Response, render_template, request
 from time import time
 
-from src.simple_lookup import real_simple_lookup
+from src.simple_lookup_pos import real_simple_lookup
 
 app = Flask(__name__)
 app.config['DEBUG'] = True

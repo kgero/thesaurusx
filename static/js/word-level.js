@@ -45,13 +45,18 @@ function add_tooltips(div) {
 // put query and full response in more-responses div
 function get_full_response(word) {
   console.log('clikced!');
-  data = {keyword: word, n: 10, embkey: 'arxiv_abs_lemma'}
+  data = {keyword: word, n: 10, embkey: 'arxiv_abs_pos'}
   $.post('real_simple_lookup?', data, function(json, status) {
-    // console.log('simple response:', json);
     if (json.hasOwnProperty('error')) { var resp = json.error; }
-    else { var resp = json['words'].join(', '); }
-    $('.more-response').prepend('<p>'+resp+'</p>');
-    $('.more-response').prepend('<p><strong>'+word+'</strong></p>')
+    else { 
+      for (var key in json.results) {
+        var resp = json.results[key].join(', ');
+        $('.more-response').prepend('<p>'+resp+'</p>');
+        $('.more-response').prepend('<p>'+key+'</p>');
+      }  
+      $('.more-response').prepend('<p><strong>'+json.word+'</strong></p>')
+    }
+    
     
   });
 }
@@ -62,10 +67,14 @@ function real_simple_lookup(word) {
   if (word.length == 0) { 
     console.log('error, looked up empty string');
     return }
-  data = {keyword: word, embkey: 'arxiv_abs_lemma'}
+  data = {keyword: word, embkey: 'arxiv_abs_pos'}
   $.post('real_simple_lookup?', data, function(json, status) {
     if (json.hasOwnProperty('error')) { var tip = json.error; }
-    else { var tip = json['words'].join(' '); }
+    else { 
+      for (var key in json.results) {
+        var tip = json.results[key].join(' '); 
+      }
+    }
     $('.' + clean(word)).attr('data-original-title', tip);
     $('[data-toggle="tooltip"]').tooltip();
   });
