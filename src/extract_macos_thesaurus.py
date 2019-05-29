@@ -38,10 +38,18 @@ def get_sense_list(word, pprint=False):
 
     if clean.split(' ')[0] != word:  # returned word w diff morphology
         word = clean.split(' ')[0]
-    sense = clean.split('.')  # each sense ends with a period
+    # remove all periods in example sentences...
+    clean = re.sub(r'(?<=Mr)\.|(?<=Mrs)\.|(?<=Dr)\.', '', clean)
+    clean = re.sub(r'U\.S\.', 'US', clean)
+    clean = re.sub(r'\.\.\.', '', clean)
+    clean = re.sub(r'option\:', 'option', clean)
+    clean = re.sub('1.98', '1', clean)
+    clean = re.sub('E.', 'E', clean)
+    # then split senses by the period at the end of each sense
+    sense = clean.split('.')
     sense_new = []  # convert into senses per part of speech
 
-    pos = ['verb', 'noun', 'adjective', 'adverb', 'preposition', 'conjunction', 'occur']
+    pos = ['verb', 'noun', 'adjective', 'adverb', 'preposition', 'conjunction', 'exclamation']
 
     if pprint:
         print(res_text, '\n')
@@ -54,12 +62,12 @@ def get_sense_list(word, pprint=False):
 
         if not s or 'ANTONYMS' in s or ':' not in s:  # throw out empty, antonyms, and w/o example
             continue
-        if re.search(r'(?<=\d):(?=\d)', s) is not None:  #looks for times like 5:30 and removes :
+        elif re.search(r'(?<=\d):(?=\d)', s) is not None:  #looks for times like 5:30 and removes :
             idx = s.index(':')
             s = s[:idx] + s[idx+1:]
-        if word in ['pugilist']:
+        elif word in ['pugilist', 'zapped', 'zap', 'wedding', 'damage']:  #outdated or informal or weird words
             return []
-        if word in ['wont', 'start', 'slate', 'embark', 'quit', 'start', 
+        elif word in ['wont', 'start', 'slate', 'embark', 'quit', 'start', 
             'walkout', 'awake', 'biological', 'supposed', 'promptly', 'occur']:
             idx = s.index(':')
             s = s[:idx] + s[idx+1:]
@@ -139,7 +147,7 @@ def get_wordlist(mobythes_path):
             allwords.update(set(words))
     return list(allwords)
 
-def create_macos_thes(wordlist, outpath, verbose=False):
+def create_macos_thes(wordlist, outpath, tmpfle='tmp/thes.txt', verbose=False):
     """Write thesaurus textfile to outpath.
 
     Query every word in wordlist to the macOS English Thesaurus.
@@ -147,49 +155,59 @@ def create_macos_thes(wordlist, outpath, verbose=False):
     If verbose, include sense information.
     Else just write all words for a given part of speech.
     """
-    count = 0
     found_words = set()
     with open(outpath, 'r') as fle:
         for line in fle:
             word = line.split(' ')[0]
             found_words.add(word)
+    with open(tmpfle, 'r') as fle:
+        text = fle.read()
+        words = line.split(' ')
+        found_words.add(word)
 
     print('found_words', len(found_words))
     print('wordlist', len(wordlist))
-    wcount = 0
+    wcount = 0  # count through wordlist
     with open(outpath, 'a') as fle:
         for w in wordlist:
             wcount += 1
             if wcount % 1000 == 0:
                 print(wcount, 'of', len(wordlist), 'in wordlist')
+
             if w in found_words:
                 continue
+
             senses = get_sense_list(w)
-            if senses:
-                count += 1
-                if count % 100 == 0:
-                    print(count, 'words')
-                found_words.add(w)
-                for s in senses:
-                    word_pos = ' '.join(s.split(' ')[:2])
-                    if len(word_pos) == 0:
-                        print('found empty:', w)
-                        continue
-                    if word_pos[0] == '(':
-                        print('found weird:', w, word_pos)
-                        continue
-                    syn_list = get_syn_words(s)
-                    line = ', '.join(syn_list)
-                    fle.write(word_pos + ':' + line + '\n')
+            if not senses:
+                with open(tmpfle, 'a') as outfle:
+                    outfle.write(w + ' ')
+                continue
+            if senses[0].split(' ')[0] in found_words:
+                continue
+
+            found_words.add(w)
+            for s in senses:
+                word_pos = ' '.join(s.split(' ')[:2])
+                if len(word_pos) == 0:
+                    print('found empty:', w)
+                    return
+                if word_pos[0] == '(':
+                    print('found weird:', w, word_pos, s)
+                    return
+                syn_list = get_syn_words(s)
+                line = ', '.join(syn_list)
+                fle.write(word_pos + ':' + line + '\n')
+            
+            with open(tmpfle, 'a') as outfle:
+                outfle.write(w + ' ')
     return count
 
 
 def run_test():
     test_words = ['adapt', 'adopt', 'model', 'expect', 'love', 'unofficial', 'poeticule']
-
     test_words = ['model', 'hinder', 'love', 'vitally', 'ride']
-
     test_words = ['spirits', 'trapping', 'impugned']
+    test_words = ['adapt', 'unfortunately']
 
     #ugh, some words return 'jell, gel' or 'tradesman, tradeswoman'... :(:(
     # test_words = ['gel', 'tradesman']
