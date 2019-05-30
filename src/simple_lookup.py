@@ -1,19 +1,12 @@
 """
 Functions for doing simply thesaurus + style look-ups.
-
-Details on pymagnitude, a fast interface for word vectors:
-https://github.com/plasticityai/magnitude
 """
-import json
-import numpy as np
+
 import os
-import requests
 import pickle
-import spacy
 
 from annoy import AnnoyIndex
 
-nlp = spacy.load('en_core_web_sm')
 
 # ASSUMES ALL EMBEDDINGS ARE 100 DIMENSION!!
 DIM = 100
