@@ -18,115 +18,99 @@ nlp = spacy.load('en_core_web_sm')
 # ASSUMES ALL EMBEDDINGS ARE 100 DIMENSION!!
 DIM = 100
 print('Loading embeddings from dat/annoy directory...')
-EMB = {}
+EMB_nms = []
+EMB_lem = {}
+EMB_pos = {}
 VOC = {}
 for filename in os.listdir('dat/annoy'):
-    if filename.split('.')[-1] == 'ann':
-        name = filename.split('.')[0]
-        if name == 'word2vec-slim':
-            u = AnnoyIndex(300)
-        else:
+    extension = filename.split('.')[-1]
+    name = filename.split('.')[0]
+    if extension == 'ann':
+        if name.split('_')[-1] == 'lemma':
             u = AnnoyIndex(DIM)
-        u.load(os.path.join('dat/annoy', filename))
-        EMB[name] = u
-    if filename.split('.')[-1] == 'pkl':
-        name = filename.split('.')[0]
+            u.load(os.path.join('dat/annoy', filename))
+            EMB_lem[name] = u
+            EMB_nms.append(name)
+        elif name.split('_')[-1] == 'pos':
+            u = AnnoyIndex(DIM)
+            u.load(os.path.join('dat/annoy', filename))
+            EMB_pos[name] = u
+            EMB_nms.append(name)
+
+for filename in os.listdir('dat/annoy'):
+    extension = filename.split('.')[-1]
+    name = filename.split('.')[0]
+    if extension == 'pkl' and name in EMB_nms:
         VOC[name] = pickle.load(open(os.path.join('dat/annoy', filename), 'rb'))
-POS = {}
-for filename in os.listdir('dat/pos'):
-    if filename.split('.')[-1] == 'pkl':
-        name = filename.split('.')[0]
-        POS[name] = pickle.load(open(os.path.join('dat/pos', filename), 'rb'))
-print('EMBEDDINGS:\n', EMB.keys())
+print('EMB_lem:\n', EMB_lem.keys())
+print('EMB_pos:\n', EMB_pos.keys())
+print('EMB_nms:\n', EMB_nms)
 print('VOCAB:\n', VOC.keys())
-print('PART OF SPEECH:\n', POS.keys())
 print('Ready!\n\n')
 
 
-def check_words(words, embkey="glove.6B.200d"):
-    """Return error message is any words not in word embeddings."""
-    vocab = VOC[embkey]
-    resp = ""
-    for w in words:
-        if w and w not in vocab:
-            resp += '{} not in vocab. '.format(w)
-    return resp
+# ALL_POS = ['PRON', 'VERB', 'ADJ', 'NOUN', 'PROPN', 'PART', 'DET', 'ADP', 'CCONJ', 'X', 'NUM']
+ALL_POS = ['PRON', 'VERB', 'ADJ', 'NOUN', 'PART', 'DET', 'ADP']
 
-def get_pos(word):
+
+
+def get_pos(word, vocab):
     """Return list of all possible parts of speech of word."""
-    pos = []
-    for pos_key in POS:
-        if word in POS[pos_key]:
-            pos += POS[pos_key][word]
-    return list(set(pos))
+    possible = []
+    for pos in ALL_POS:
+        if word+'_'+pos in vocab:
+            possible.append(pos)
+    return possible
 
-def get_lemma(word):
-    """Return lemma of word."""
-    doc = nlp(word)
-    for token in doc:
-        return token.lemma_
+def get_pos_words(keyword_pos, vocab, vectors):
+    """Return top 10 words with same pos as keyword.
 
-def simple_lookup(keyword, pos, embkey="glove.6B.200d", nopos=False):
-    """Return words from thesaurus lookup, ordered by embedding distance."""
-    vectors = EMB[embkey]
-    vocab = VOC[embkey]
-    if keyword not in vocab:
-        return {'error': '{} not in embeddings.'.format(keyword)}
-
-    keyidx = vocab.index(keyword)
-    # words = [w for w in thesaurus_lookup(keyword, pos) if w in vocab]
-    # dist = []
-    # for w in words:
-    #     dist.append(vectors.get_distance(keyidx, vocab.index(w)))
-    # order = np.argsort(dist)
-
+    keywork_pos is str in form word_POS."""
+    pos = keyword_pos.split('_')[-1]
+    keyidx = vocab.index(keyword_pos)
     raw = [vocab[idx] for idx in vectors.get_nns_by_item(keyidx, 50)]
-    note = ''
-    if embkey in POS.keys() and not nopos:
-        raw = [word for word in raw if POS[embkey].get(word) is not None]
-        raw = [get_lemma(word) for word in raw if pos in POS[embkey][word]]
-        raw = [word for word in raw if word != get_lemma(keyword)]
-        seen = set()
-        seen_add = seen.add
-        raw = [x for x in raw if not (x in seen or seen_add(x))]
-        note = '(returning only {} words from {})'.format(pos, embkey)
-    else:
-        raw = [get_lemma(word) for word in raw]
-        raw = [word for word in raw if word != get_lemma(keyword)]
-        seen = set()
-        seen_add = seen.add
-        raw = [x for x in raw if not (x in seen or seen_add(x))]
-        note = '(no part-of-speech information available.)'
+    return [w.split('_')[0] for w in raw if w.split('_')[-1] == pos]
 
-    return {
-        # 'closest': [words[i] for i in order][:10],  # muted
-        # 'distance': [dist[i] for i in order],
-        'words': raw[1:11],  # first
-        'note': note
-        }
+def simple_lookup(keyword, embkey="arxiv_abs_lemma"):
+    """Return words from thesaurus lookup, ordered by embedding distance."""
+    if embkey not in EMB_nms:
+        return {'error': '{} not a valid embkey.'.format(keyword)}
 
-def real_simple_lookup(keyword, embkey, n=5):
-    keyword = keyword.strip(',.;:').lower()
-    keyword = get_lemma(keyword)
-    vectors = EMB[embkey]
     vocab = VOC[embkey]
-    if keyword not in vocab:
-        return {'error': '{} not in embeddings.'.format(keyword)}
+    
+    data = {}
+    if embkey in EMB_pos:
+        vectors = EMB_pos[embkey]
+        possible_pos = get_pos(keyword, vocab)
+        if not possible_pos:
+            return {'error': '{} not in embeddings.'.format(keyword)}
+        data['pos'] = True
+        results = {}
+        for pos in possible_pos:
+            raw = get_pos_words(keyword+'_'+pos, vocab, vectors)
+            if len(raw) > 3:
+                results[keyword+'_'+pos] = raw[1:11]
+        data['results'] = results
+    else:
+        if keyword not in vocab:
+            return {'error': '{} not in embeddings.'.format(keyword)}
+        vectors = EMB_lem[embkey]
+        data['pos'] = False
+        keyidx = vocab.index(keyword)
+        raw = [vocab[idx] for idx in vectors.get_nns_by_item(keyidx, 10)]
+        data['results'] = {keyword: raw[1:]}
 
-    keyidx = vocab.index(keyword)
-    raw = [vocab[idx] for idx in vectors.get_nns_by_item(keyidx, n, search_k=100)[1:]]
-    note = ''
-    return {
-        'words': raw,
-        'note': note
-        }
+    return data
 
-def get_vocab(embkey):
-    return VOC[embkey]
+def thesaurus_lookup(keyword):
+    """Return list of all words from a thesaurus lookup."""
 
-def thesaurus_lookup(keyword, pos):
-    """Return list of all words from a thesaurus lookup with pos in tags."""
-    payload = {'ml': keyword, 'max': 1000}
-    r = requests.get('https://api.datamuse.com/words', params=payload)
-    wellformed = [d for d in r.json() if d.get('tags') is not None]
-    return [d["word"] for d in wellformed if pos in d.get('tags')]
+    results = {}
+    with open('dat/other/mac_thes.txt', 'r') as fle:
+        for line in fle:
+            if line.split(' ')[0] == keyword:
+                line = line.strip('\n')
+                entry, words = line.split(':')
+                pos = entry.split(' ')[1]
+                results[keyword+'_'+pos.upper()] = words.split(', ')
+    return {'embd': 'rogets', 'pos': True, 'results': results}

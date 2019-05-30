@@ -24,6 +24,8 @@ class MySentences(object):
                 clean = line.lower().translate(table)
                 yield clean.split()
 
+
+# issue where it doesn't strip line breaks?
 class MySentences_lemma(object):
     """Return one sentence/line, split at spaces.
 
@@ -37,13 +39,13 @@ class MySentences_lemma(object):
     def __iter__(self):
         for fname in os.listdir(self.dirname):
             for line in open(os.path.join(self.dirname, fname), errors='ignore'):
-                words = line.split(' ')
+                words = line.strip('\n').split(' ')
                 if self.strip_pos:
                     words = [w.split('_')[0] for w in words]
                 yield [w for w in words if w not in ['', '\n']]
 
-name = 'arxiv_abs'
-data = 'dat/corpora/' + name
+name = 'gandhi'
+data = 'dat/corpora_lemma/' + name
 
 word_cnt = 0
 for fname in os.listdir(data):
@@ -52,10 +54,14 @@ for fname in os.listdir(data):
 print(name, ":", word_cnt, 'words')
 
 
-for i in range(3):
-    print('dat/vecs/{}_lemma_{}.txt'.format(name, i))
+# defaults in gensim model:
+# size=100, window=5, min_count=5, iter=5,
+# should i be removing stop words?
+for i in range(1):
+    outfile = 'dat/vecs/{}_pos_{}.txt'.format(name, i)
+    print(outfile)
     start = time()
-    sentences = MySentences(data)  # a memory-friendly iterator
-    model = gensim.models.Word2Vec(sentences, size=100, window=5)
-    model.wv.save_word2vec_format('dat/vecs/{}_{}.txt'.format(name, i))
+    sentences = MySentences_lemma(data, strip_pos=False)  # a memory-friendly iterator
+    model = gensim.models.Word2Vec(sentences, size=100, window=5, min_count=10)
+    model.wv.save_word2vec_format(outfile)
     print("took {:<2f} seconds".format(time() - start))
