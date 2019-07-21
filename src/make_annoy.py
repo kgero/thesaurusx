@@ -7,7 +7,7 @@ from time import time
 
 for fle_nm in os.listdir('dat/vecs'):
     emb_nm = fle_nm.split('.')[0]
-    if emb_nm not in ['oneb_lemma']:
+    if emb_nm not in ['gandhi_pos']:
         continue
     print(emb_nm)
 

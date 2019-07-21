@@ -44,7 +44,7 @@ class MySentences_lemma(object):
                     words = [w.split('_')[0] for w in words]
                 yield [w for w in words if w not in ['', '\n']]
 
-name = 'gandhi'
+name = 'gothic'
 data = 'dat/corpora_lemma/' + name
 
 word_cnt = 0

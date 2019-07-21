@@ -29,11 +29,11 @@ var embeddings = {
 };
 
 var descriptions = {
-  'Science': '40k abstracts of scientific papers from arXiv.org',
+  'Science': '40k science abstracts from arXiv.org',
   'Joyce': 'novels by James Joyce',
   'Darwin': 'naturalist books by Charles Darwin',
   '1B Corpus': 'the one billion word benchmark, mostly news articles',
-  'Gandhi': 'collected speeches and letters of Mahatma Gandhi',
+  'Gandhi': 'speeches & letters of Mahatma Gandhi',
   'Oxford': "the Oxford American Writer's Thesaurus"
 }
 

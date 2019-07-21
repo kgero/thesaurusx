@@ -47,7 +47,4 @@ def make_lemma_corpus(name, basepath='dat/corpora/', outpath='dat/corpora_lemma/
 #     print(token.text, token.lemma_, token.pos_, token.tag_, token.dep_,
 #           token.shape_, token.is_alpha, token.is_stop)
 
-makeme = ['arxiv_abs', 'nyt-science', 'poetry', 'joyce']
-
-make_lemma_corpus('gandhi')
-
+make_lemma_corpus('scifi')
