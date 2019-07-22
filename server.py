@@ -1,11 +1,8 @@
 import json
-from sklearn.decomposition import PCA
 
 from flask import Flask, Response, render_template, request
-from time import time
 
 from src.simple_lookup import simple_lookup, thesaurus_lookup
-from src.get_usage import get_ex_sen
 
 
 app = Flask(__name__)
@@ -25,7 +22,6 @@ def get_words_thes():
 def get_words_algo():
     rform = request.form
     data = simple_lookup(rform['keyword'], embkey=rform['embd'])
-    # data.update(get_ex_sen(word, rform['embd']))
     data['embd'] = rform['embd']
     resp = Response(json.dumps(data), status=200, mimetype='application/json')
     return resp

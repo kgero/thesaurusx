@@ -1,9 +1,13 @@
-"""Create dict for each corpus of words and possible part of speech tags."""
+"""
+Given a corpus, create new corpus where each word is replaced
+by the word + _ + part-of-speech tag. This will allow us to create
+part-of-speech cognizant word embeddings.
+"""
 
-import pickle
+import argparse
 import os
 import spacy
-
+import sys
 
 
 nlp = spacy.load('en_core_web_sm')
@@ -42,9 +46,23 @@ def make_lemma_corpus(name, basepath='dat/corpora/', outpath='dat/corpora_lemma/
         fleout = os.path.join(outpath, filename)
         make_lemma_file(flein, fleout)
 
-# doc = nlp(u"--I'd give you such a belt in a second.")
-# for token in doc:
-#     print(token.text, token.lemma_, token.pos_, token.tag_, token.dep_,
-#           token.shape_, token.is_alpha, token.is_stop)
 
-make_lemma_corpus('scifi')
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-f', '--folder',
+                        help=('The folder containing the input data.  '
+                              'Should be in the /dat/corpora directory.'))
+    args = parser.parse_args()
+
+    if not os.path.exists('dat'):
+        print('Requires /dat directory.')
+        sys.exit()
+
+    if not os.path.exists(os.path.join('dat/corpora', args.folder)):
+        print(f"Input data folder [dat/corpora/{args.folder}] doesn't exist.")
+        sys.exit()
+
+    if not os.path.exists('dat/corpora_lemma'):
+        os.mkdir('dat/corpora_lemma')
+
+    make_lemma_corpus(args.folder)

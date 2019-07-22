@@ -1,19 +1,19 @@
+"""Create version of embeddings that is very quick to load."""
+
+import argparse
 import pickle
 import os
+import sys
 
-from annoy import AnnoyIndex
 from time import time
+from annoy import AnnoyIndex
 
 
-for fle_nm in os.listdir('dat/vecs'):
-    emb_nm = fle_nm.split('.')[0]
-    if emb_nm not in ['gandhi_pos']:
-        continue
-    print(emb_nm)
-
+def make_ann(filename, emb_nm):
+    print(f'making annoy version of {filename}')
     vocab = []
 
-    with open('dat/vecs/{}.txt'.format(emb_nm), 'r') as fle:
+    with open(filename, 'r') as fle:
         sz, dim = [int(num) for num in fle.readline().split(' ')]
         print('vocab: {} dim: {}'.format(sz, dim))
 
@@ -32,7 +32,23 @@ for fle_nm in os.listdir('dat/vecs'):
     t.save('dat/annoy/{}.ann'.format(emb_nm))
     pickle.dump(vocab, open('dat/annoy/{}.v.pkl'.format(emb_nm), 'wb'))
 
-
     key = 50
     print([vocab[idx] for idx in t.get_nns_by_item(key, 10)])
     print('\n')
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-f', '--filename',
+                        help=('The name of embedding file (incl .txt extension).  '
+                              'Should be in the /dat/vecs directory.'))
+    args = parser.parse_args()
+
+    fname = os.path.join('dat/vecs', args.filename)
+
+    if not os.path.exists(fname):
+        print(f"Embedding file {fname} doesn't exist.")
+        sys.exit()
+
+    name = args.filename[:-4]
+
+    make_ann(fname, name)

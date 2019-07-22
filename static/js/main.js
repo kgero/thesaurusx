@@ -1,30 +1,13 @@
 
 var embeddings = {
-  // 'GoogleNews': 'GoogleNews-vectors-negative300', 
-  // 'Wikipedia+Gigaword': 'glove-6B-200d', 
-  // 'Twitter': 'glove-twitter-27B-50d',
-  // 'Food Reviews': 'food',
-  // 'GloVe': 'glove-slim',
   'Science': 'arxiv_abs_pos',
-  // 'Science (l)': 'arxiv_abs_lemma',
-  // 'Joyce': 'joyce',
   'Joyce': 'joyce_pos',
-  // 'Dickens': 'dickens',
   'Darwin': 'darwin_pos',
-  // 'Sherlock': 'sherlock',
-  // 'Poetry Magazine': 'poetry',
-  // 'Aretha Tweets': 'aretha',
-  // 'Australia Tweets': 'australia',
-  // '1B Corpus': 'oneb',
   '1B Corpus': 'oneb_pos',
-  // 'Word2Vec': 'word2vec-slim',
   'Gandhi': 'gandhi_pos',
-  // 'NYT Science': 'nyt-science',
-  // 'Law': 'law'
-  // 'Merge Science Big': 'merge-science-big',
-  // 'Merge Science Small': 'merge-science-small'
-  // 'Darwin Dep': 'darwin-dep',
-  // 'Joyce Dep': 'joyce-dep',
+  'Gothic': 'gothic_pos',
+  'Philosophy': 'philosophy_pos',
+  'Sci-fi': 'scifi_pos',
   'Oxford': 'rogets'
 };
 
@@ -34,6 +17,9 @@ var descriptions = {
   'Darwin': 'naturalist books by Charles Darwin',
   '1B Corpus': 'the one billion word benchmark, mostly news articles',
   'Gandhi': 'speeches & letters of Mahatma Gandhi',
+  'Gothic': 'gothic horror novels',
+  'Philosophy': 'philosophy books',
+  'Sci-fi': 'pulp 1950s scifi magazines',
   'Oxford': "the Oxford American Writer's Thesaurus"
 }
 
