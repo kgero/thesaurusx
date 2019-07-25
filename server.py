@@ -6,7 +6,6 @@ from src.simple_lookup import simple_lookup, thesaurus_lookup
 
 
 app = Flask(__name__)
-app.config['DEBUG'] = True
 
 @app.route('/')
 def hello_world():
@@ -28,4 +27,4 @@ def get_words_algo():
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=False)

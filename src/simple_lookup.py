@@ -99,7 +99,7 @@ def thesaurus_lookup(keyword):
     """Return list of all words from a thesaurus lookup."""
 
     results = {}
-    with open('dat/other/mac_thes.txt', 'r') as fle:
+    with open('dat/thes/mac_thes.txt', 'r') as fle:
         for line in fle:
             if line.split(' ')[0] == keyword:
                 line = line.strip('\n')

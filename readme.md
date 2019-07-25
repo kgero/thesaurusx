@@ -1,10 +1,16 @@
 # Field Thesaurus
 
-A Flask app that implements a new kind of thesaurus based on word embeddings.
+A Flask app that implements a new kind of thesaurus based on word embeddings. A live version of this application can be found at [thesaurus.ml].
 
-A live version of this application can be found at [thesaurus.ml].
+You can run also run a local version, and create your own custom thesauruses based on your own corpora. Download a pre-prepared `dat` directory with everything needed to start running this asap:
 
-You can run also run a local version, and create your own custom thesauruses based on your own corpora.
+`https://www.dropbox.com/s/0fhm46dnp8cc8aq/dat.zip?dl=0`
+
+To view the thesaurus locally run:
+
+`python server.py`
+
+**
 
 To create a new theseaurus run:
 
@@ -12,30 +18,25 @@ To create a new theseaurus run:
 
 Where `corpus_name` is the name of a folder in `dat/corpora` and contains one or more text files.
 
-To view the thesaurus locally run:
-
-`python server.py`
-
-## Todo
-
-* better way to select vectors for web interface
-* test doing whole thing from "new" download from github
-
 ## Setup
 
 Runs on python3. Install requirements using requirements.txt. I recommend using a virtual environment.
 
-This github repo comes with some pre-trained word embeddings for the user interface in dat/annoy.
+Download a pre-prepared `dat` directory with some pre-trained word embeddings for the user interface:
+
+`https://www.dropbox.com/s/0fhm46dnp8cc8aq/dat.zip?dl=0`
+
+You should now have files in a folder called `dat/annoy` and one file in `dat/thes`. (In `dat/thes` is a plain-text "normal" thesaurus.)
 
 ### Spacy for part-of-speech tagging
 
-To create your own word embeddings, you'll need to parse your corpuss using the spacy parser. [spacy.io] has great documentation, but really the only thing you need to do to make sure it works is to download a model with the following command:
+To create your own word embeddings, you'll need to parse your corpus using the spacy parser. [Spacy.io] has great documentation, but really the only thing you need to do to make sure it works is to download a model with the following command:
 
 `python -m spacy download en`
 
 ## Word embeddings
 
-Word embeddings are first created with the gensim library, and then converted into [annoy](https://github.com/spotify/annoy) format, which is a approximate nearest neighbors library to very fast look-ups.
+Word embeddings are first created with the gensim library, and then converted into [annoy](https://github.com/spotify/annoy) format, which is a approximate nearest neighbors library for very fast look-ups.
 
 
 ## Corpora

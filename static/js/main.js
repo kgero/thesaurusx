@@ -1,13 +1,13 @@
 
 var embeddings = {
-  'Science': 'arxiv_abs_pos',
-  'Joyce': 'joyce_pos',
-  'Darwin': 'darwin_pos',
   '1B Corpus': 'oneb_pos',
+  'Darwin': 'darwin_pos',
   'Gandhi': 'gandhi_pos',
   'Gothic': 'gothic_pos',
+  'Joyce': 'joyce_pos',
   'Philosophy': 'philosophy_pos',
   'Sci-fi': 'scifi_pos',
+  'Science': 'arxiv_abs_pos',
   'Oxford': 'rogets'
 };
 
