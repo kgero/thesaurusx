@@ -4,7 +4,7 @@ fasteners==0.14.1
 Flask==1.0.2
 h5py==2.8.0
 itsdangerous==1.1.0
-Jinja2==2.10
+Jinja2==2.11.3
 lz4==2.1.2
 MarkupSafe==1.1.0
 monotonic==1.5
