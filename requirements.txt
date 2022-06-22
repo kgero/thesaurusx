@@ -8,7 +8,7 @@ Jinja2==2.10
 lz4==2.1.2
 MarkupSafe==1.1.0
 monotonic==1.5
-numpy==1.15.4
+numpy==1.22.0
 pymagnitude==0.1.120
 six==1.12.0
 torch==0.4.1
