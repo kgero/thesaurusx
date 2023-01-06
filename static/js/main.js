@@ -114,8 +114,14 @@ function get_words_algo() {
         }
         var p = $("<p>");
         $.each(json.results[word], function(i, text) {
+          var word_obj = $("<a>").text(text).attr("text", text);
+          word_obj.click(function() {
+            $('#keyword').val($(this).attr("text"));
+            get_words_algo();
+          })
           if (i >= 10) { return false; }
-          p.append(text).append(', ');
+          p.append(word_obj);
+          if (i < json.results[word].length - 1) { p.append(', '); }
         });
         $('#' + json.embd).append(p);
       });
