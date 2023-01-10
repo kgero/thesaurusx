@@ -145,6 +145,8 @@ $(document).ready( function() {
 
   update_styles();
 
+  $('input:checkbox').change( function() {update_styles();} );
+
   $('#keyword').bind('keyup', function(e) {
     if ( e.keyCode === 13 ) { // 13 is enter key
       get_words_algo(); 
@@ -153,10 +155,6 @@ $(document).ready( function() {
 
   $('.get_words').click( function() { 
     get_words_algo(); 
-  });
-
-  $('.update_styles').click( function() { 
-    update_styles();  
   });
 
 });
