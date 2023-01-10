@@ -23,6 +23,8 @@ var descriptions = {
   'Oxford': "the Oxford American Writer's Thesaurus"
 }
 
+var word_history = [];
+
 var default_checks = ['rogets', 'arxiv_abs_pos', 'gandhi_pos']
 
 function set_up() {
@@ -66,6 +68,8 @@ function update_styles() {
 }
 
 function get_words_algo() {
+  word_history.push($('#keyword').val().toString());
+  console.log('history', word_history);
   $('#search-word').empty();
   $('#search-word').append('<h2>'+$('#keyword').val()+'</h2>');
 
@@ -87,6 +91,13 @@ function get_words_algo() {
     console.log('endpoint, key, data', endpoint, key, data)
 
     $.post(endpoint, data, function(json, status) {
+      // update history
+      $(".history").empty();
+      $.each(word_history, function(i, word) {
+        $('.history').append(word).append("<br>");
+      });
+
+
       $('#' + json.embd).empty();
       console.log('algo response:', json);
       if (json.hasOwnProperty('error')) {
