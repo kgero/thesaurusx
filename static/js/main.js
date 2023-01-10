@@ -27,34 +27,25 @@ var default_checks = ['rogets', 'arxiv_abs_pos', 'gandhi_pos']
 
 function set_up() {
   console.log('making new divs...');
-  var dl = $("<dl>");
-  dl.addClass('dl-horizontal');
-  var dt = $('<dt>');
-  // dt.append('Rogets').addClass('norm').addClass('style');
-  // var dd = $('<dd>');
-  // dd.addClass('rogets').addClass('norm').addClass('style');
-  // dl.append(dt).append(dd);
   for (var key in embeddings) {
-    var dt = $('<dt>');
-    dt.append(key);
-    dt.addClass(embeddings[key]).addClass('style lead').css('font-weight', 300);
-    var dd = $('<dd>');
-    dd.addClass(embeddings[key]).addClass('style');
-    dd.attr('id', embeddings[key]);
-    dl.append(dt).append(dd);
+    var div = $("<div>").addClass("style p-1").addClass(embeddings[key]);
+    var title = $("<p>").addClass("thesaurus_header").append(key);
+    var content = $("<div>").attr('id', embeddings[key]);
+    div.append(title).append(content);
+    $('.main').append(div);
   }
-  $('.main').append(dl);
+  
 
   // making checkboxes
   for (var key in embeddings) {
-    var lab = $('<label class="checkbox-inline">');
+    var lab = $('<label class="checkbox-inline thesaurus_header">');
     var box = $('<input type="checkbox">');
     box.attr('id', embeddings[key] + '_box');
     box.val(embeddings[key]);
-    lab.append(box).append(key);
+    lab.append(box).append(' ').append(key).append(':');
     $('.checkboxes').append(lab);
-    $('.checkboxes').append("<br />");
-    var descrip = $('<small>').addClass('text-muted');
+    // $('.checkboxes').append("<br />");
+    var descrip = $('<span>').append(' ');
     descrip.append(descriptions[key]);
     $('.checkboxes').append(descrip).append("<br />");
   }
@@ -106,13 +97,15 @@ function get_words_algo() {
       $.each(json.results, function(word) {
         console.log('word iteration', json.embd, word);
         
+        // make part-of-speech (e.g. adj) span
         if (word.indexOf('_') > -1) { 
-          var lead = $("<p>").addClass('lead').css('margin-bottom', '0px');
-          var pos = word.split('_')[1].toLowerCase();
-          lead.append(pos);
-          $('#' + json.embd).append(lead);
+          var p = $("<p>").addClass("results_p");
+          var pos = $("<span>").addClass('pos').css('margin-bottom', '0px');
+          var pos_text = word.split('_')[1].toLowerCase();
+          pos.append(pos_text).append('. ');
+          p.append(pos);
         }
-        var p = $("<p>");
+        // add all the synonyms
         $.each(json.results[word], function(i, text) {
           var word_obj = $("<a>").text(text).attr("text", text);
           word_obj.click(function() {
@@ -123,6 +116,7 @@ function get_words_algo() {
           p.append(word_obj);
           if (i < json.results[word].length - 1) { p.append(', '); }
         });
+        // add whole p tag to style div
         $('#' + json.embd).append(p);
       });
       

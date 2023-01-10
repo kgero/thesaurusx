@@ -1,0 +1,49 @@
+body {
+  font-size: 16px;
+  font-family: "Times New Roman";
+}
+h1 {
+  font-family: 'Playfair Display', serif;
+}
+h2 {
+  text-transform: lowercase;
+  font-size: 1.5em;
+  text-align: left;
+  font-weight: bold;
+}
+p.tag {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+}
+.select-styles {
+  margin-bottom: 0rem;
+  margin-top: 1rem;
+}
+.results_p {
+  margin-bottom: .25em;
+}
+.pos {
+  font-weight: bold;
+}
+.thesaurus_header {
+  font-style: italic;
+  text-transform: lowercase;
+  margin-bottom: 0px;
+}
+.results {
+  border: 1px solid black;
+  color: dimgrey;
+}
+.usage {
+  font-style: italic;
+}
+.spin {
+    animation: spin infinite 2s linear;
+}
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+.cool-font {
+  font-family: 'Playfair Display', serif;
+}

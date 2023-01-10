@@ -15,7 +15,7 @@
     <title>Style Thesaurus</title>
 
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
     <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Noto+Serif+KR:200,300,400,500,600,700,900&display=swap" rel="stylesheet">
@@ -23,9 +23,9 @@
     <script src="{{ url_for('static', filename='js/jquery-3.4.1.min.js') }}"></script>
 
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-    <!-- <link href="{{ url_for('static', filename='css/style.css') }}" type="text/css" rel="stylesheet"> -->
+    <link href="{{ url_for('static', filename='css/style.css') }}" type="text/css" rel="stylesheet">
 
-    <style>
+   <!--  <style>
       body {
         font-size: 16px;
       }
@@ -44,11 +44,9 @@
         font-family: 'Playfair Display', serif;
         font-size: 18px;
       }
-      div.footer {
-        /*display: none;*/
-        /*position: fixed;*/
-        /*bottom: 0;*/
-        /*width: 70%;*/
+      .results {
+        border: 1px solid black;
+        color: dimgrey;
       }
       .usage {
         font-style: italic;
@@ -63,7 +61,7 @@
       .cool-font {
         font-family: 'Playfair Display', serif;
       }
-    </style>
+    </style> -->
 
     <meta charset='utf-8'>
   </head>
@@ -83,15 +81,21 @@
             <br />
 
             <!-- search functionality -->
-            <div class="form-inline">
-              <div class="form-group has-success">
-                <input type="text" class="form-control" id="keyword" placeholder="tender">
+            <div class="row">
+              <div class="col-3"></div>
+              <div class="col-3">
+                <div class="form-group has-success">
+                  <input type="text" class="form-control" id="keyword" placeholder="tender">
+                </div>
               </div>
-              <button class="btn btn-success get_words">Search</button>
+              <div class="col-3 text-start">
+                <button class="btn btn-success get_words">Search</button>
+              </div>
             </div>
+
             <br />
-            <div id="search-word">
-            </div>
+
+            <div id="search-word"></div>
 
 
 
@@ -101,16 +105,9 @@
         
           <div class="main"></div>
 
-          
-
-
-        </div>
-
-        <div class="col-md-3">
-          <br />
           <div class="panel panel-default">
             <div class="panel-body">
-              <p>Select styles:</p>
+              <p class="select-styles">Select styles:</p>
               <div class="checkboxes">
               </div>
               <p>
@@ -120,9 +117,18 @@
             </div>
           </div>
 
+
+        </div>
+
+        <div class="col-md-3">
+          <p> History
+          <div class="history">
+          </div>
+          
+
           <div class="footer">
             <br />
-            <p>
+            <!-- <p>
               <small>
                 The Style Thesaurus automatically creates a thesaurus from a large corpus of text, such that the thesaurus reflects the stylistic preferences of that text. 
                 <br /><br />
@@ -134,7 +140,7 @@
                 <br />
                 I would love to know your thoughts! 
             </small>
-            </p>
+            </p> -->
           </div>
             
         </div>
