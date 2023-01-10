@@ -16,6 +16,9 @@ p.tag {
   font-size: 18px;
   text-align: left;
 }
+a:hover {
+  cursor: pointer;
+}
 .select-styles {
   margin-bottom: 0rem;
   margin-top: 1rem;
