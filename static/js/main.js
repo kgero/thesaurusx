@@ -29,6 +29,8 @@ var default_checks = ['rogets', 'arxiv_abs_pos', 'gandhi_pos']
 
 function set_up() {
   console.log('making new divs...');
+
+  // making thesaurus divs
   for (var key in embeddings) {
     var div = $("<div>").addClass("style p-1").addClass(embeddings[key]);
     var title = $("<p>").addClass("thesaurus_header").append(key);
@@ -38,34 +40,34 @@ function set_up() {
   }
   
 
-  // making checkboxes
-  for (var key in embeddings) {
-    var lab = $('<label class="checkbox-inline thesaurus_header">');
-    var box = $('<input type="checkbox">');
-    box.attr('id', embeddings[key] + '_box');
-    box.val(embeddings[key]);
-    lab.append(box).append(' ').append(key).append(':');
-    $('.checkboxes').append(lab);
-    // $('.checkboxes').append("<br />");
-    var descrip = $('<span>').append(' ');
-    descrip.append(descriptions[key]);
-    $('.checkboxes').append(descrip).append("<br />");
-  }
+  // // making checkboxes
+  // for (var key in embeddings) {
+  //   var lab = $('<label class="checkbox-inline thesaurus_header">');
+  //   var box = $('<input type="checkbox">');
+  //   box.attr('id', embeddings[key] + '_box');
+  //   box.val(embeddings[key]);
+  //   lab.append(box).append(' ').append(key).append(':');
+  //   $('.checkboxes').append(lab);
+  //   // $('.checkboxes').append("<br />");
+  //   var descrip = $('<span>').append(' ');
+  //   descrip.append(descriptions[key]);
+  //   $('.checkboxes').append(descrip).append("<br />");
+  // }
 
-  //check defaults
-  $.each(default_checks, function(i, val) {
-    $('#' + val + '_box').prop('checked', true);
-  });
+  // //check defaults
+  // $.each(default_checks, function(i, val) {
+  //   $('#' + val + '_box').prop('checked', true);
+  // });
 }
 
-function update_styles() {
-  $('.style').hide();
-  $("input[type=checkbox]:checked").each(function() {
-    key = $(this).val();
-    console.log( key );
-    $('.' + key).show();
-  });
-}
+// function update_styles() {
+//   $('.style').hide();
+//   $("input[type=checkbox]:checked").each(function() {
+//     key = $(this).val();
+//     console.log( key );
+//     $('.' + key).show();
+//   });
+// }
 
 function get_words_algo() {
   word_history.push($('#keyword').val().toString());
@@ -154,7 +156,7 @@ $(document).ready( function() {
 
   set_up();
 
-  update_styles();
+  // update_styles();
 
   $('input:checkbox').change( function() {update_styles();} );
 

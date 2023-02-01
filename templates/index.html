@@ -25,44 +25,6 @@
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     <link href="{{ url_for('static', filename='css/style.css') }}" type="text/css" rel="stylesheet">
 
-   <!--  <style>
-      body {
-        font-size: 16px;
-      }
-      dd {
-        margin-bottom: 20px;
-      }
-      h1 {
-        font-family: 'Playfair Display', serif;
-        /*font-size: 60px;*/
-      }
-      h2 {
-        /*font-family: 'Playfair Display', serif;*/
-        /*font-size: 60px;*/
-      }
-      p.tag {
-        font-family: 'Playfair Display', serif;
-        font-size: 18px;
-      }
-      .results {
-        border: 1px solid black;
-        color: dimgrey;
-      }
-      .usage {
-        font-style: italic;
-      }
-      .spin {
-          animation: spin infinite 2s linear;
-      }
-      @keyframes spin {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-      }
-      .cool-font {
-        font-family: 'Playfair Display', serif;
-      }
-    </style> -->
-
     <meta charset='utf-8'>
   </head>
   <body>
@@ -72,10 +34,24 @@
         <div class="col-md-1"></div>
         <div class="col-md-8">
           
-          <div class="text-center">
+          <div>
             <h1>Style Thesaurus</h1>
             <p class="tag">
               find adjacent words based on different domains, authors, and styles
+            </p>
+
+            <p>
+              <small>
+                <i>
+                The Style Thesaurus automatically creates a thesaurus from a large corpus of text, such that the thesaurus reflects the stylistic preferences of that text. 
+                The exception is 'Oxford', which is a "normal" thesaurus: the Oxford American Writer's Thesaurus.
+                </i>
+              </small>
+            </p> 
+            <p>
+              <small>
+              Made by <a href="http://www.katygero.com/" target="_blank">Katy Ilonka Gero</a>.
+              </small>
             </p>
             
             <br />
@@ -104,10 +80,10 @@
         
           <div class="main"></div>
 
-          <div class="m-2">
+          <!-- <div class="m-2">
               <p class="select-styles">Select styles:</p>
               <div class="checkboxes"></div>
-          </div>
+          </div> -->
 
 
         </div>
@@ -120,19 +96,7 @@
 
           <div class="footer">
             <br />
-            <!-- <p>
-              <small>
-                The Style Thesaurus automatically creates a thesaurus from a large corpus of text, such that the thesaurus reflects the stylistic preferences of that text. 
-                <br /><br />
-                (For the technically inclined, it trains a word embedding on part-of-speech tagged data, and returns the nearest neighbors filtered by part-of-speech.)
-                <br /><br />
-                The exception is 'Oxford', which is a "normal" thesaurus: the Oxford American Writer's Thesaurus.
-                <br /><br />
-                Made by <a href="http://www.katygero.com/" target="_blank">Katy Ilonka Gero</a>.
-                <br />
-                I would love to know your thoughts! 
-            </small>
-            </p> -->
+            
           </div>
             
         </div>

@@ -1,9 +1,9 @@
 body {
   font-size: 16px;
-  font-family: "Times New Roman";
+  font-family: 'Noto Serif', serif;
 }
 h1 {
-  font-family: 'Times New Roman', serif;
+  font-family: 'Playfair Display', serif;
   text-align: left;
 }
 h2 {
@@ -30,8 +30,9 @@ a:hover {
   font-weight: bold;
 }
 .thesaurus_header {
-  font-style: italic;
-  text-transform: lowercase;
+/*  font-style: italic;*/
+  text-transform: uppercase;
+  color: grey;
   margin-bottom: 0px;
 }
 .results {
