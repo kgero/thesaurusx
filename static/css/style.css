@@ -1,43 +1,59 @@
 body {
   font-size: 16px;
-  font-family: 'Noto Serif', serif;
+  font-family: serif;
 }
 h1 {
-  font-family: 'Playfair Display', serif;
+  font-family: serif;
   text-align: left;
+  margin-top: 1em;
 }
 h2 {
+  font-style: italic;
   text-transform: lowercase;
-  font-size: 1.5em;
+  font-size: 2em;
   text-align: left;
   font-weight: bold;
+  margin: 1em 0 1em 0;
 }
 p.tag {
+  font-family: serif;
   font-size: 18px;
   text-align: left;
 }
 a:hover {
   cursor: pointer;
 }
+.main-col {
+  max-width: 600px;
+}
+#modelbutton {
+  cursor: pointer;
+}
+.panel {
+  padding: 10px;
+  border-left: solid lightgrey 1px;
+}
 .select-styles {
   margin-bottom: 0rem;
   margin-top: 1rem;
 }
 .results_p {
-  margin-bottom: .25em;
+  margin-bottom: .5em;
 }
 .pos {
   font-weight: bold;
 }
-.thesaurus_header {
-/*  font-style: italic;*/
+.thesaurus-header {
+  margin-bottom: .5em;
   text-transform: uppercase;
-  color: grey;
-  margin-bottom: 0px;
+  color: lightgrey;
 }
-.results {
-  border: 1px solid black;
-  color: dimgrey;
+.corpus-results {
+  border-bottom: 1px solid black;
+  padding: 1em;
+}
+.oneb_pos {
+  border-top: 1px solid black;
 }
 .usage {
   font-style: italic;

@@ -16,91 +16,135 @@
 
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
 
     <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Noto+Serif+KR:200,300,400,500,600,700,900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
     <script src="{{ url_for('static', filename='js/jquery-3.4.1.min.js') }}"></script>
-
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     <link href="{{ url_for('static', filename='css/style.css') }}" type="text/css" rel="stylesheet">
 
     <meta charset='utf-8'>
   </head>
   <body>
-    <div class="container-fluid">
+    <script>
+      $(document).ready( function() {
 
-      <div class="row mt-4">
-        <div class="col-md-1"></div>
-        <div class="col-md-8">
-          
-          <div>
-            <h1>Style Thesaurus</h1>
-            <p class="tag">
-              find adjacent words based on different domains, authors, and styles
-            </p>
+        console.log('booting up...');
 
+        set_up();
+
+        if ($('#keyword').val()) {
+          get_words_algo(); 
+        }
+
+        $('#keyword').bind('keyup', function(e) {
+          if ( e.keyCode === 13 ) { // 13 is enter key
+            get_words_algo(); 
+          }
+        });
+
+        $('.get_words').click( function() { 
+          get_words_algo(); 
+        });
+
+
+      });
+    </script>
+    <div class="modal" id="aboutmodal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body">
             <p>
-              <small>
-                <i>
-                The Style Thesaurus automatically creates a thesaurus from a large corpus of text, such that the thesaurus reflects the stylistic preferences of that text. 
-                The exception is 'Oxford', which is a "normal" thesaurus: the Oxford American Writer's Thesaurus.
-                </i>
-              </small>
+              The Style Thesaurus let's you search automatically created thesauruses. Each thesaurus is generated using a large corpus of text, and words that appear in similar contexts are returned as 'synonyms'. It is not like a typical thesaurus; it eskews good synonyms for words that are related in some way. For instance, if you search for 'tender', in a typical thesuarus you might get something like this: 
+            </p>
+            <p>
+              <i>caring, affectionate, romantic, kindly, young</i>
+            </p>
+            <p>
+              In contrast, this is the response from the Gandhi corpus:
+            </p>
+            <p>
+              <i>fertile, soft, degraded, lovable, sturdy, dull</i>
+            </p>
+            <p>
+              Few of these are precise synonyms, but rather give you some words around the word 'tender'. And this is the response from the Philosophy corpus:
+            </p>
+            <p>
+              <i>passionate, humble, generous, bitter, gentle, cheerful</i>
+            </p>
+            <p>
+               The exception is 'Oxford' thesaurus, which is a "normal" thesaurus: the Oxford American Writer's Thesaurus.
+            </p>
+            <p>
+              <b>Is this powered by AI?</b> Depends on what you mean by AI. These thesauruses are created by an automated analysis of text; a program was written to do this and the synonyms (or rather, nearby words) were not hand-selected. However, these thesauruses do not use language models of the sort currently powering popular AI tools, and they rely on relatively small (<10 megabytes) amounts of text.
             </p> 
             <p>
               <small>
               Made by <a href="http://www.katygero.com/" target="_blank">Katy Ilonka Gero</a>.
               </small>
             </p>
-            
-            <br />
+          </div>
+        </div>
+      </div>
+    </div>
 
-            <!-- search functionality -->
-            <div class="row">
-              <div class="col-3">
-                <div class="form-group has-success">
-                  <input type="text" class="form-control" id="keyword" placeholder="tender">
-                </div>
-              </div>
-              <div class="col-3 text-start">
-                <button class="btn btn-success get_words">Search</button>
+
+    <div class="container-fluid">
+
+      <div class="row mt-4">
+        <div class="col-md-2"></div>
+        <div class="col-md-8 main-col">
+
+          <h1>Style Thesaurus</h1>
+          <p class="tag">
+            Find adjacent words based on different domains, authors, and styles.
+            <sup>[<span id="modelbutton" data-bs-toggle="modal" data-bs-target="#aboutmodal">?</span>]</sup>
+          </p>
+          
+          <br />
+
+          <!-- search functionality -->
+          <div class="row">
+            <div class="col-5">
+              <div class="form-group has-success">
+                <input type="text" class="form-control" id="keyword" placeholder="tender" value="{{word}}">
               </div>
             </div>
-
-            <br />
-
-            <div id="search-word"></div>
-
-
-
+            <div class="col-3 text-start">
+              <button class="btn btn-light get_words">Search</button>
+            </div>
           </div>
 
-          
+          <div id="search-word"></div>
+
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8 mb-4 main-col">
         
           <div class="main"></div>
 
-          <!-- <div class="m-2">
-              <p class="select-styles">Select styles:</p>
-              <div class="checkboxes"></div>
-          </div> -->
-
-
         </div>
 
-        <div class="col-md-3">
-          <p> <i>History</i>
-          <div class="history">
-          </div>
-          
-
-          <div class="footer">
-            <br />
-            
-          </div>
-            
+        <div class="col-md-2">
+          <div class="panel">
+            <p> 
+              <i>History</i>
+              <div class="history"></div>
+            </p>
         </div>
 
     </div>
+
+    
+
   </body>
 </html>

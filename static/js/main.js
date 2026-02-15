@@ -32,42 +32,16 @@ function set_up() {
 
   // making thesaurus divs
   for (var key in embeddings) {
-    var div = $("<div>").addClass("style p-1").addClass(embeddings[key]);
-    var title = $("<p>").addClass("thesaurus_header").append(key);
+    var div = $("<div>").addClass("corpus-results").addClass(embeddings[key]);
+    var title = $("<p>").addClass("thesaurus-header").append(key);
     var content = $("<div>").attr('id', embeddings[key]);
     div.append(title).append(content);
     $('.main').append(div);
   }
-  
 
-  // // making checkboxes
-  // for (var key in embeddings) {
-  //   var lab = $('<label class="checkbox-inline thesaurus_header">');
-  //   var box = $('<input type="checkbox">');
-  //   box.attr('id', embeddings[key] + '_box');
-  //   box.val(embeddings[key]);
-  //   lab.append(box).append(' ').append(key).append(':');
-  //   $('.checkboxes').append(lab);
-  //   // $('.checkboxes').append("<br />");
-  //   var descrip = $('<span>').append(' ');
-  //   descrip.append(descriptions[key]);
-  //   $('.checkboxes').append(descrip).append("<br />");
-  // }
-
-  // //check defaults
-  // $.each(default_checks, function(i, val) {
-  //   $('#' + val + '_box').prop('checked', true);
-  // });
 }
 
-// function update_styles() {
-//   $('.style').hide();
-//   $("input[type=checkbox]:checked").each(function() {
-//     key = $(this).val();
-//     console.log( key );
-//     $('.' + key).show();
-//   });
-// }
+
 
 function get_words_algo() {
   word_history.push($('#keyword').val().toString());
@@ -85,9 +59,7 @@ function get_words_algo() {
       embd: embeddings[key]
     };
 
-    
-
-    if (embeddings[key] == 'rogets') { var endpoint = 'get_words_thes?' } 
+    if (embeddings[key] == 'rogets') { var endpoint = 'get_words_thes?' }
     else { var endpoint = 'get_words_algo?'}
 
     console.log('endpoint, key, data', endpoint, key, data)
@@ -103,15 +75,15 @@ function get_words_algo() {
       $('#' + json.embd).empty();
       console.log('algo response:', json);
       if (json.hasOwnProperty('error')) {
-        $('#' + json.embd).append('<p>' + json.error);
+        $('#' + json.embd).append('<p><i>' + json.error);
         return;
       }
-      
+
       $.each(json.results, function(word) {
         console.log('word iteration', json.embd, word);
-        
+
         // make part-of-speech (e.g. adj) span
-        if (word.indexOf('_') > -1) { 
+        if (word.indexOf('_') > -1) {
           var p = $("<p>").addClass("results_p");
           var pos = $("<span>").addClass('pos').css('margin-bottom', '0px');
           var pos_text = word.split('_')[1].toLowerCase();
@@ -132,7 +104,7 @@ function get_words_algo() {
         // add whole p tag to style div
         $('#' + json.embd).append(p);
       });
-      
+
       if (json.hasOwnProperty('note')) {
         if (json.note.length > 1) {
           var p = $("<p>");
@@ -148,26 +120,3 @@ function get_words_algo() {
     });
   }
 }
-
-
-$(document).ready( function() {
-
-  console.log('booting up...');
-
-  set_up();
-
-  // update_styles();
-
-  $('input:checkbox').change( function() {update_styles();} );
-
-  $('#keyword').bind('keyup', function(e) {
-    if ( e.keyCode === 13 ) { // 13 is enter key
-      get_words_algo(); 
-    }
-  });
-
-  $('.get_words').click( function() { 
-    get_words_algo(); 
-  });
-
-});

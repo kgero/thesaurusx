@@ -9,7 +9,11 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
-    return render_template('index.html', results=['a', 'b'])
+    return render_template('index.html', word="")
+
+@app.route('/<word>')
+def word_query(word):
+    return render_template('index.html', word=word)
 
 @app.route('/get_words_thes', methods=['POST'])
 def get_words_thes():
@@ -46,4 +50,4 @@ def get_words_algo():
 
 
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run(debug=True)
