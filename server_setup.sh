@@ -14,6 +14,7 @@
 set -e
 
 APP_NAME="stylethesaurus"
+GIT_NAME="thesaurusx"
 APP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"  # repo root, wherever it is
 PYTHON="python3"
 
@@ -44,7 +45,7 @@ User=$USER
 Group=www-data
 WorkingDirectory=$APP_DIR
 Environment=\"PATH=$APP_DIR/venv/bin\"
-ExecStart=$APP_DIR/venv/bin/uwsgi --ini $APP_DIR/$APP_NAME.ini
+ExecStart=$APP_DIR/venv/bin/uwsgi --ini $APP_DIR/$GIT_NAME.ini
 
 Restart=always
 RestartSec=5

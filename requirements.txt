@@ -4,3 +4,4 @@ gensim==4.4.0
 numpy==2.4.4
 Requests==2.33.1
 spacy==3.8.7
+annoy==1.17.3

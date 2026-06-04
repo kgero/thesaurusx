@@ -70,15 +70,15 @@ how many processes, where to put the socket, and what path to mount at.
 
 ### First-time setup on a new server
 
-1. Download the embedding files for `/dat` (they're not in the github repo; see above). 
-2. Clone the github repo.
+1. Clone the github repo.
+2. Download the embedding files for `/dat` (they're not in the github repo; see above). 
 3. Run `bash server_setup.sh`.
 
 
 ### Wiring to nginx
 
 nginx config lives centrally on the server (not in this repo) because it
-covers multiple apps running on the domain at once. After running `install.sh`, add these
+covers multiple apps running on the domain at once. After running `server_setup.sh`, add these
 blocks to the nginx server config:
 
 ```nginx
