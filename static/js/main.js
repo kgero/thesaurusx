@@ -1,6 +1,6 @@
 
 var embeddings = {
-  '1B Corpus': 'oneb_pos',
+  // '1B Corpus': 'oneb_pos',
   'Darwin': 'darwin_pos',
   'Gandhi': 'gandhi_pos',
   'Gothic': 'gothic_pos',
@@ -15,7 +15,7 @@ var descriptions = {
   'Science': '40k science abstracts from arXiv.org',
   'Joyce': 'novels by James Joyce',
   'Darwin': 'naturalist books by Charles Darwin',
-  '1B Corpus': 'the one billion word benchmark, mostly news articles',
+  // '1B Corpus': 'the one billion word benchmark, mostly news articles',
   'Gandhi': 'speeches & letters of Mahatma Gandhi',
   'Gothic': 'gothic horror novels',
   'Philosophy': 'philosophy books',
@@ -30,6 +30,9 @@ var default_checks = ['rogets', 'arxiv_abs_pos', 'gandhi_pos']
 function set_up() {
   console.log('making new divs...');
 
+  $('.main').css('visibility', 'hidden'); // hide until first search
+  $('.panel').css('visibility', 'hidden'); // hide until first search
+  
   // making thesaurus divs
   for (var key in embeddings) {
     var div = $("<div>").addClass("corpus-results").addClass(embeddings[key]);
@@ -38,12 +41,14 @@ function set_up() {
     div.append(title).append(content);
     $('.main').append(div);
   }
-
 }
 
 
 
 function get_words_algo() {
+  $('.main').css('visibility', 'visible'); // make sure div is visible
+  $('.panel').css('visibility', 'visible'); // make sure div is visible
+
   word_history.push($('#keyword').val().toString());
   console.log('history', word_history);
   $('#search-word').empty();
