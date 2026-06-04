@@ -7,8 +7,7 @@
 # the app as a systemd service.
 #
 # Usage:
-#   cd ~/stylethesaurus
-#   bash install.sh
+#   bash server_setup.sh
 # =============================================================================
 
 set -e
@@ -68,10 +67,6 @@ echo ""
 echo "    location /stylethesaurus {"
 echo "        include uwsgi_params;"
 echo "        uwsgi_pass unix:/tmp/${APP_NAME}.sock;"
-echo "    }"
-echo ""
-echo "    location /stylethesaurus/static/ {"
-echo "        alias $APP_DIR/static/;"
 echo "    }"
 echo ""
 echo "Useful commands:"

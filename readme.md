@@ -84,13 +84,11 @@ blocks to the nginx server config:
 ```nginx
 location /stylethesaurus {
     include uwsgi_params;
-    uwsgi_pass unix:/tmp/stylethesaurus.sock;
-}
-
-location /stylethesaurus/static/ {
-    alias /home/yourname/stylethesaurus/static/;
+    uwsgi_pass unix:/home/username/thesaurusx/thesaurusx.sock;
 }
 ```
+
+This should be a `.conf` file in `/etc/nginx/sites-available/`
 
 Then reload nginx:
 
@@ -98,11 +96,12 @@ Then reload nginx:
 sudo nginx -t && sudo systemctl reload nginx
 ```
 
+[This tutorial](https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-uswgi-and-nginx-on-ubuntu-18-04) might help.
 
 ### Deploying updates
 
 ```bash
-cd ~/stylethesaurus
+cd ~/thesaurusx
 git pull
 sudo systemctl restart stylethesaurus
 ```
